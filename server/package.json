@@ -1,0 +1,59 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
+    "migrate-dev": "env-cmd -f ./config/dev.env npx prisma migrate dev",
+    "seed": "env-cmd -f ./config/dev.env prisma db seed",
+    "db-push": "env-cmd -f ./config/dev.env npx prisma db push",
+    "migrate-reset": "env-cmd -f ./config/dev.env npx prisma migrate reset",
+    "migrate-resolve": "env-cmd -f ./config/dev.env npx prisma migrate resolve",
+    "studio-dev": "env-cmd -f ./config/dev.env npx prisma studio",
+    "test": "env-cmd -f ./config/test.env jest --watchAll --detectOpenHandles --runInBand --testTimeout=12000",
+    "migrate-test": "env-cmd -f ./config/test.env npx prisma migrate dev",
+    "db-push-test": "env-cmd -f ./config/test.env npx prisma db push",
+    "migrate-reset-test": "env-cmd -f ./config/test.env npx prisma migrate reset",
+    "studio-test": "env-cmd -f ./config/test.env npx prisma studio",
+    "build": "babel src --out-dir dist --copy-files",
+    "start": "env-cmd -f ./config/prod.env node dist/index.js",
+    "migrate-deploy": "env-cmd -f ./config/prod.env npx prisma migrate deploy"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@apollo/client": "^3.5.10",
+    "@graphql-tools/graphql-file-loader": "^7.3.7",
+    "@graphql-tools/load": "^7.5.6",
+    "@graphql-tools/schema": "^8.3.6",
+    "@paljs/plugins": "^4.0.18",
+    "@prisma/client": "^3.11.1",
+    "cross-fetch": "^3.1.5",
+    "cuid": "^2.1.8",
+    "env-cmd": "^10.1.0",
+    "express": "^4.17.3",
+    "graphql": "^16.3.0",
+    "graphql-postgres-subscriptions": "^1.0.5",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-yoga": "^2.0.0",
+    "http-errors": "^2.0.0",
+    "mkdirp": "^1.0.4",
+    "nanoid": "^3.3.2",
+    "subscriptions-transport-ws": "^0.11.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/node": "^7.16.8",
+    "@babel/plugin-proposal-object-rest-spread": "^7.17.3",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/register": "^7.17.7",
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "prisma": "^3.11.1",
+    "react": "^18.0.0"
+  }
+}
