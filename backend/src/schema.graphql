@@ -32,6 +32,7 @@ type Calculation {
   result: Float!
   order: Int!
   file: File
+  isDeleted: Boolean!
   createdAt: Date!
   updatedAt: Date!
 }

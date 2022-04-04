@@ -1,29 +1,10 @@
 import createError from "../utils/createError"
-import { PrismaSelect } from '@paljs/plugins'
+import { Calculation } from '../server/db/models/Calculation'
 
 const Query = {
-  calculations(parent, args, { prisma }, info) {
+  async calculations(parent, args, { prisma }, info) {
     try {
-      const select = new PrismaSelect(info).value
-      const opArgs = {
-        take: args.take,
-        skip: args.skip,
-        where: {
-          isDeleted: false
-        },
-        ...select
-      };
-      if(typeof args.cursor === 'string') {
-        opArgs.cursor = {
-          id: args.cursor
-        }
-      }
-      if(args.query) {
-        opArgs.where.OR = [{
-          title: { contains: args.query, mode: 'insensitive' }
-        }]
-      }
-      return prisma.calculation.findMany(opArgs)
+      return Calculation.find({ isDeleted: false });
     } catch (error) {
       return createError.BadRequest(error)
     }

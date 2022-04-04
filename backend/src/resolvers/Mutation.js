@@ -3,6 +3,7 @@ import { createWriteStream, unlink } from 'fs'
 import * as mkdirp from 'mkdirp'
 import { nanoid } from 'nanoid'
 import { uploadDir } from "../utils"
+import { Calculation } from '../server/db/models/Calculation'
 
 const storeUpload = async ({ stream, filename }) => {
   const id = nanoid()
@@ -27,44 +28,38 @@ function deleteSingleFile(file) {
 }
 
 const Mutation = {
-  createCalculation(parent, args, { prisma }, info) {
+  createCalculation(parent, args, { pubsub }, info) {
     try {
-      const select = new PrismaSelect(info).value;
       const { title, result, order, fileId } = args.data;
-      const data = { title, result, order }
-      if(fileId) data.file = { connect: { id: fileId } }
-      return prisma.calculation.create({ data, ...select })
+      const payload = { title, result, order }
+      if(fileId) payload.file = fileId
+      const calculation = new Calculation(payload)
+      return calculation.save();
     } catch (error) {
       return createError.BadRequest(error)
     }
   },
 
-  updateCalculation(parent, args, { prisma }, info) {
+  updateCalculation(parent, args, { pubsub }, info) {
     try {
-      const select = new PrismaSelect(info).value;
       const { title, result, order, fileId } = args.data;
-      const data = { title, result, order }
-      if(fileId) data.file = { connect: { id: fileId } }
-      return prisma.calculation.update({ where: { id: args.id }, data, ...select })
+      const payload = { title, result, order }
+      if(fileId) payload.file = fileId
+      return Calculation.findByIdAndUpdate(args.id, payload, { new: true })
     } catch (error) {
       return createError.BadRequest(error)
     }
   },
 
-  deleteCalculation(parent, args, { prisma }, info) {
+  deleteCalculation(parent, args, { pubsub }, info) {
     try {
-      const select = new PrismaSelect(info).value;
-      return prisma.calculation.update({
-        where: { id: args.id },
-        data: { isDeleted: true },
-        ...select
-      })
+      return Calculation.findByIdAndUpdate(args.id, { isDeleted: true }, { new: true });
     } catch (error) {
       return createError.BadRequest(error)
     }
   },
 
-  async uploadFile(parent, args, { prisma }, info) {
+  async uploadFile(parent, args, { pubsub }, info) {
     try {
       // Ensure upload directory exists
       mkdirp.sync(uploadDir)
@@ -87,7 +82,7 @@ const Mutation = {
     }
   },
 
-  async deleteFile(parent, args, { prisma }, info) {
+  async deleteFile(parent, args, { pubsub }, info) {
     try {
       // Ensure upload directory exists
       mkdirp.sync(uploadDir)

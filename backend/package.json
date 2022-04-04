@@ -4,58 +4,42 @@
   "main": "index.js",
   "scripts": {
     "dev": "env-cmd -f ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
-    "migrate-dev": "env-cmd -f ./config/dev.env npx prisma migrate dev",
-    "seed": "env-cmd -f ./config/dev.env prisma db seed",
-    "db-push": "env-cmd -f ./config/dev.env npx prisma db push",
-    "migrate-reset": "env-cmd -f ./config/dev.env npx prisma migrate reset",
-    "migrate-resolve": "env-cmd -f ./config/dev.env npx prisma migrate resolve",
-    "studio-dev": "env-cmd -f ./config/dev.env npx prisma studio",
     "test": "env-cmd -f ./config/test.env jest --watchAll --detectOpenHandles --runInBand --testTimeout=12000",
-    "migrate-test": "env-cmd -f ./config/test.env npx prisma migrate dev",
-    "db-push-test": "env-cmd -f ./config/test.env npx prisma db push",
-    "migrate-reset-test": "env-cmd -f ./config/test.env npx prisma migrate reset",
-    "studio-test": "env-cmd -f ./config/test.env npx prisma studio",
     "build": "babel src --out-dir dist --copy-files",
-    "start": "env-cmd -f ./config/prod.env node dist/index.js",
-    "migrate-deploy": "env-cmd -f ./config/prod.env npx prisma migrate deploy"
+    "start": "env-cmd -f ./config/prod.env node dist/index.js"
   },
   "license": "MIT",
-  "prisma": {
-    "seed": "node prisma/seed.js"
-  },
   "resolutions": {
-    "graphql": "^16.3.0"
+    "graphql": "^15.7.2"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.10",
+    "@apollo/client": "^3.5.5",
     "@graphql-tools/graphql-file-loader": "^7.3.3",
     "@graphql-tools/load": "^7.4.1",
     "@graphql-tools/schema": "^8.3.1",
-    "@paljs/plugins": "^4.0.18",
-    "@prisma/client": "^3.11.1",
-    "cross-fetch": "^3.1.5",
+    "cross-fetch": "^3.1.4",
     "cuid": "^2.1.8",
     "env-cmd": "^10.1.0",
-    "express": "^4.17.3",
-    "graphql": "^16.3.0",
+    "express": "^4.17.1",
+    "graphql": "^15.7.2",
     "graphql-subscriptions": "^2.0.0",
     "graphql-yoga": "^1.18.3",
-    "http-errors": "^2.0.0",
+    "http-errors": "^1.8.1",
     "mkdirp": "^1.0.4",
-    "nanoid": "^3.3.2",
+    "mongoose": "^6.2.10",
+    "nanoid": "^3.1.30",
     "subscriptions-transport-ws": "^0.11.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.8",
-    "@babel/node": "^7.16.8",
-    "@babel/plugin-proposal-object-rest-spread": "^7.17.3",
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/node": "^7.16.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.16.0",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/register": "^7.17.7",
-    "jest": "^27.5.1",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/register": "^7.16.0",
+    "jest": "^27.4.3",
     "nodemon": "^2.0.15",
-    "prisma": "^3.11.1",
     "react": "^18.0.0"
   }
 }

@@ -1,6 +1,5 @@
 import { GraphQLServer, PubSub } from 'graphql-yoga';
 import { resolvers } from '../resolvers';
-import prisma from '../prisma';
 import express from 'express';
 import path from 'path'
 
@@ -12,7 +11,6 @@ const server = new GraphQLServer({
   context(request) {
     return {
       request,
-      prisma,
       pubsub,
     }
   },

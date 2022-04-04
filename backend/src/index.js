@@ -1,4 +1,5 @@
 import server from './server';
+import Mongoose from './server/db';
 
 const options = {
   port: process.env.HTTP_PORT,
@@ -15,6 +16,8 @@ if(process.env.NODE_ENV === 'production') {
   options.playground = false;
 }
 
-server.start(options, ({ port }) => {
-  console.log(`🚀 server is running on localhost:${port}`)
-})
+Mongoose.connection.once("open", function(){
+  server.start(options, ({ port }) => {
+    console.log(`🚀 server is running on localhost:${port}`)
+  })
+});
