@@ -1,0 +1,37 @@
+scalar Date
+scalar Upload
+
+type Query {
+  calculations(query: String, skip: Int, take: Int, cursor: String): [Calculation!]!
+  calculationList(query: String, skip: Int, take: Int, cursor: String): CalculationList
+}
+
+type CalculationList {
+  count: Int!
+  hasNextPage: Boolean!
+  calculations(
+    query: String
+    cursor: String
+    take: Int
+    skip: Int
+  ): [Calculation!]!
+}
+
+type Calculation {
+  id: ID!
+  title: String!
+  result: Float!
+  order: Int!
+  file: File
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type File {
+  id: ID!
+  path: String!
+  filename: String!
+  mimetype: String!
+  encoding: String!
+  calculation: Calculation
+}
