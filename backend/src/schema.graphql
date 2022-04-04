@@ -6,6 +6,15 @@ type Query {
   calculationList(query: String, skip: Int, take: Int, cursor: String): CalculationList
 }
 
+type Mutation {
+  createCalculation(data: CreateCalculationInput!): Calculation!
+  updateCalculation(id: ID!, data: UpdateCalculationInput!): Calculation!
+  deleteCalculation(id: ID!): Calculation!
+
+  uploadFile (file: Upload!): File!
+  deleteFile (file: DeleteFileInput!): File!
+}
+
 type CalculationList {
   count: Int!
   hasNextPage: Boolean!
@@ -34,4 +43,23 @@ type File {
   mimetype: String!
   encoding: String!
   calculation: Calculation
+}
+
+input CreateCalculationInput {
+  title: String!
+  result: Float!
+  order: Int!
+  fileId: String
+}
+
+input UpdateCalculationInput {
+  title: String
+  result: Float
+  order: Int
+  fileId: String
+}
+
+input DeleteFileInput {
+  id: String!
+  filename: String!
 }

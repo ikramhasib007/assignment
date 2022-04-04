@@ -17,6 +17,7 @@ model Calculation {
   result        Float
   order         Int       @default(0)
   file          File?
+  isDeleted     Boolean   @default(false)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }

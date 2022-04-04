@@ -1,12 +1,12 @@
-import { createServer, createPubSub } from '@graphql-yoga/node'
+import { GraphQLServer, PubSub } from 'graphql-yoga';
 import { resolvers } from '../resolvers';
 import prisma from '../prisma';
 import express from 'express';
 import path from 'path'
 
-const pubsub = createPubSub()
+const pubsub = new PubSub()
 
-const server = createServer({
+const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
   context(request) {
@@ -24,7 +24,7 @@ const server = createServer({
  * Please check out links: https://docs.nginx.com/nginx/admin-guide/web-server/serving-static-content/
  */
 
-// const pathDir = path.join(__dirname, `../../uploads`);
-// server.express.use('/uploads', express.static(pathDir))
+const pathDir = path.join(__dirname, `../../uploads`);
+server.express.use('/uploads', express.static(pathDir))
 
 export default server
