@@ -1,7 +1,10 @@
+import Results from "components/results"
 
 function Output() {
   return (
-    <div>Output</div>
+    <div className='space-y-4'>
+      <Results />
+    </div>
   )
 }
 
