@@ -1,4 +1,4 @@
-import createError from '../utils/createError'
+import httpErrors from '../utils/httpErrors'
 import { createWriteStream, unlink } from 'fs'
 import * as mkdirp from 'mkdirp'
 import { nanoid } from 'nanoid'
@@ -36,7 +36,7 @@ const Mutation = {
       const calculation = new Calculation(payload)
       return calculation.save();
     } catch (error) {
-      return createError.BadRequest(error)
+      return httpErrors.BadRequest(error)
     }
   },
 
@@ -47,7 +47,7 @@ const Mutation = {
       if(fileId) payload.file = fileId
       return Calculation.findByIdAndUpdate(args.id, payload, { new: true })
     } catch (error) {
-      return createError.BadRequest(error)
+      return httpErrors.BadRequest(error)
     }
   },
 
@@ -55,7 +55,7 @@ const Mutation = {
     try {
       return Calculation.findByIdAndUpdate(args.id, { isDeleted: true }, { new: true });
     } catch (error) {
-      return createError.BadRequest(error)
+      return httpErrors.BadRequest(error)
     }
   },
 
@@ -78,7 +78,7 @@ const Mutation = {
 
       return processUpload(args.file)
     } catch (error) {
-      return createError.BadRequest(error)
+      return httpErrors.BadRequest(error)
     }
   },
 
@@ -91,7 +91,7 @@ const Mutation = {
       return prisma.file.delete({ where: { id: args.file.id } })
 
     } catch (error) {
-      return createError.BadRequest(error)
+      return httpErrors.BadRequest(error)
     }
   },
 

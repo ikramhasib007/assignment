@@ -2,6 +2,7 @@ scalar Date
 scalar Upload
 
 type Query {
+  calculation(id: ID!): Calculation!
   calculations(query: String, skip: Int, take: Int, cursor: String): [Calculation!]!
   calculationList(query: String, skip: Int, take: Int, cursor: String): CalculationList
 }

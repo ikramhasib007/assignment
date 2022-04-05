@@ -1,12 +1,22 @@
-import createError from "../utils/createError"
+import httpErrors from "../utils/httpErrors"
 import { Calculation } from '../server/db/models/Calculation'
 
 const Query = {
-  async calculations(parent, args, { prisma }, info) {
+  async calculation(parent, args, ctx, info) {
+    try {
+      const calculation = await Calculation.findOne({ _id: args.id, isDeleted: false }).populate('file');
+      if(!calculation) return httpErrors.NotFound()
+      return calculation
+    } catch (error) {
+      return httpErrors.BadRequest(error)
+    }
+  },
+
+  calculations(parent, args, ctx, info) {
     try {
       return Calculation.find({ isDeleted: false });
     } catch (error) {
-      return createError.BadRequest(error)
+      return httpErrors.BadRequest(error)
     }
   },
   
@@ -47,7 +57,7 @@ const Query = {
       }
       return listData;
     } catch (error) {
-      return createError.BadRequest(error)
+      return httpErrors.BadRequest(error)
     }
   }
 }
