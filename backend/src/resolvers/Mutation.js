@@ -44,7 +44,18 @@ const Mutation = {
         payload.order = 0 // dummy order
       }
       const calculation = new Calculation(payload)
-      return calculation.save();
+      await calculation.save();
+
+      // Published through the channel
+      pubsub.publish(`newCalculation`, {
+        calculation: {
+          mutation: 'CREATED',
+          data: calculation
+        }
+      })
+      // Publishing ends
+
+      return calculation
     } catch (error) {
       return httpErrors.BadRequest(error)
     }

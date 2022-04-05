@@ -49,6 +49,10 @@ type File {
   calculation: Calculation
 }
 
+type Subscription {
+  calculation: CalculationSubscriptionPayload
+}
+
 input CreateCalculationInput {
   title: String!
   fileId: String
@@ -62,4 +66,15 @@ input UpdateCalculationInput {
 input DeleteFileInput {
   uid: String!
   filename: String!
+}
+
+type CalculationSubscriptionPayload {
+  mutation: MutationType!
+  data: Calculation!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
 }
