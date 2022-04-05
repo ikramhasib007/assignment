@@ -8,6 +8,10 @@
     "build": "babel src --out-dir dist --copy-files",
     "start": "env-cmd -f ./config/prod.env node dist/index.js"
   },
+  "jest": {
+    "globalSetup": "./tests/jest/globalSetup.js",
+    "globalTeardown": "./tests/jest/globalTeardown.js"
+  },
   "license": "MIT",
   "resolutions": {
     "graphql": "^15.7.2"

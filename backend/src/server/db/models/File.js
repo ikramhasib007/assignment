@@ -12,4 +12,4 @@ const fileSchema = new Schema({
 
 const File = Mongoose.model('File', fileSchema);
 
-module.exports = { File };
+export { File };

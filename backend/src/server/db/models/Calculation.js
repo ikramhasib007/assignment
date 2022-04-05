@@ -13,4 +13,4 @@ const calculationSchema = new Schema({
 
 const Calculation = Mongoose.model('Calculation', calculationSchema);
 
-module.exports = { Calculation };
+export { Calculation }
