@@ -10,7 +10,7 @@ yarn && yarn run dev
 Make sure mongodb service is on your machine. ENV file is included `./config`
 
 ## [Client]
-Please create a `.env.development.local` on the `client` root
+Please create a `.env.development.local` on the `client` root.
 sample values are
 ```
 DOMAIN=localhost
