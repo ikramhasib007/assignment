@@ -20,7 +20,6 @@ type Mutation {
 
 type CalculationList {
   count: Int!
-  hasNextPage: Boolean!
   calculations(
     query: String
     cursor: String

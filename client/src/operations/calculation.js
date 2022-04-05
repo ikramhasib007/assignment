@@ -17,6 +17,24 @@ export const GET_CALCULATIONS = gql`
   }
 `
 
+export const GET_CALCULATION_LIST = gql`
+  ${CALCULATION_FIELDS}
+
+  query GetCalculationList(
+    $query: String,
+    $skip: Int,
+    $take: Int,
+    $cursor: String
+  ) {
+    calculationList(query: $query, skip: $skip, take: $take, cursor: $cursor) {
+      calculations(query: $query, skip: $skip, take: $take, cursor: $cursor) {
+        ...CalculationFields
+      }
+      count
+    }
+  }
+`
+
 export const GET_CALCULATION = gql`
   ${CALCULATION_FIELDS}
 
