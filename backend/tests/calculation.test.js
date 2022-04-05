@@ -12,8 +12,6 @@ describe('MUTATE /calculation', () => {
     let variables = {
       data: {
         title: 'Calculation 1',
-        result: 2,
-        order: 1,
       }
     }
     const { data } = await client.mutate({
@@ -28,16 +26,16 @@ describe('MUTATE /calculation', () => {
     expect(calculations.length).toBe(2)
   })
   
-  test('Should not create a calculation with INVALID input', async () => {
-    let variables = {
-      data: {
-        title: 'Other fields must be required',
-      }
-    }
-    await expect(
-      client.mutate({ mutation: CREATE_CALCULATION, variables })
-    ).rejects.toThrow()
-  })
+  // test('Should not create a calculation with INVALID input', async () => {
+  //   let variables = {
+  //     data: {
+  //       title: 'Other fields must be required',
+  //     }
+  //   }
+  //   await expect(
+  //     client.mutate({ mutation: CREATE_CALCULATION, variables })
+  //   ).rejects.toThrow()
+  // })
 
   test('Should delete a calculation', async () => {
     let variables = {

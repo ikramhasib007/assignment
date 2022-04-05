@@ -1,5 +1,5 @@
 import httpErrors from '../utils/httpErrors'
-import { createWriteStream, unlink } from 'fs'
+import { createWriteStream, unlink, readFile } from 'fs'
 import * as mkdirp from 'mkdirp'
 import { nanoid } from 'nanoid'
 import { uploadDir } from "../utils"
@@ -29,11 +29,20 @@ function deleteSingleFile(file) {
 }
 
 const Mutation = {
-  createCalculation(parent, args, { pubsub }, info) {
+  async createCalculation(parent, args, { pubsub }, info) {
     try {
-      const { title, result, order, fileId } = args.data;
-      const payload = { title, result, order }
-      if(fileId) payload.file = fileId
+      const { title, fileId } = args.data;
+      const payload = { title }
+      if(fileId) {
+        payload.file = fileId
+        const file = await File.findById(fileId)
+        readFile(file.path, 'utf8', (err, data) => {
+          if(err) throw new Error('read error')
+          console.log('data: ', data);
+        })
+        payload.result = 10 // dummy result
+        payload.order = 0 // dummy order
+      }
       const calculation = new Calculation(payload)
       return calculation.save();
     } catch (error) {

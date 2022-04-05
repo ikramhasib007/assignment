@@ -52,15 +52,11 @@ type File {
 
 input CreateCalculationInput {
   title: String!
-  result: Float!
-  order: Int!
   fileId: String
 }
 
 input UpdateCalculationInput {
   title: String
-  result: Float
-  order: Int
   fileId: String
 }
 

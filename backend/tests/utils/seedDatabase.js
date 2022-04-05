@@ -11,8 +11,6 @@ Date.prototype.addDays = function(days) {
 export const calculationOne = {
   input: {
     title: 'First case',
-    result: 2.21,
-    order: 1
   },
   data: undefined
 }

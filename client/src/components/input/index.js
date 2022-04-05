@@ -3,6 +3,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { classNames } from 'src/utils'
 import UploadFile from 'components/uploads/UploadFile'
+import { useMutation } from '@apollo/client'
+import { CREATE_CALCULATION } from 'src/operations/calculation'
+import SubmitButton from 'components/loaders/SubmitButton'
 
 const schema = yup.object().shape({
   title: yup.string().trim().label('Title').required(),
@@ -10,21 +13,30 @@ const schema = yup.object().shape({
 })
 
 function InputForm() {
-  const { control, register, handleSubmit, formState:{ errors }, setValue, reset } = useForm({
+  const { register, handleSubmit, formState:{ errors }, setValue, reset } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       title: '',
       file: null
     }
   })
+
+  const [mutate, { loading }] = useMutation(CREATE_CALCULATION)
   
   function onSubmit(formData) {
-    console.log('formData: ', formData);
-    
+    const data = {
+      title: formData.title,
+      fileId: formData.file ? formData.file.id : undefined
+    }
+    mutate({
+      variables: { data }
+    }).then(() => {
+      reset()
+    }).catch(e => {
+      console.log('e: ', e);
+    })
   }
   
-  console.log('errors: ', errors);
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
       <div>
@@ -59,12 +71,7 @@ function InputForm() {
 
       <div>
         <div className="flex">
-          <button
-            type="submit"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Calculate
-          </button>
+          <SubmitButton loading={loading} buttonText='Calculate' />
         </div>
       </div>
     </form>
