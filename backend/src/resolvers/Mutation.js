@@ -4,22 +4,23 @@ import * as mkdirp from 'mkdirp'
 import { nanoid } from 'nanoid'
 import { uploadDir } from "../utils"
 import { Calculation } from '../server/db/models/Calculation'
+import { File } from '../server/db/models/File'
 
 const storeUpload = async ({ stream, filename }) => {
-  const id = nanoid()
-  const path = `${uploadDir}/${id}-${filename}`
+  const uid = nanoid()
+  const path = `${uploadDir}/${uid}-${filename}`
 
   return new Promise((resolve, reject) =>
     stream
       .pipe(createWriteStream(path))
-      .on('finish', () => resolve({ id, path }))
+      .on('finish', () => resolve({ uid, path }))
       .on('error', reject),
   )
 }
 
 function deleteSingleFile(file) {
   return new Promise((resolve, reject) => {
-    let filepath = `${uploadDir}/${file.id}-${file.filename}`
+    let filepath = `${uploadDir}/${file.uid}-${file.filename}`
     unlink(filepath, function(err) {
       if (err) return reject(err);
       else return resolve(null);
@@ -59,21 +60,21 @@ const Mutation = {
     }
   },
 
-  async uploadFile(parent, args, { pubsub }, info) {
+  async uploadFile(parent, args, ctx, info) {
     try {
       // Ensure upload directory exists
       mkdirp.sync(uploadDir)
       
       const recordFile = async data => {
-        await prisma.file.create({ data })
-        return data;
+        const file = await File.create(data)
+        return file;
       }
 
       const processUpload = async upload => {
         const { createReadStream, filename, mimetype, encoding } = await upload
         const stream = createReadStream()
-        const { id, path } = await storeUpload({ stream, filename })
-        return recordFile({ id, filename, mimetype, encoding, path: path.substr(2) })
+        const { uid, path } = await storeUpload({ stream, filename })
+        return recordFile({ uid, filename, mimetype, encoding, path: path.substr(2) })
       }
 
       return processUpload(args.file)
@@ -82,13 +83,13 @@ const Mutation = {
     }
   },
 
-  async deleteFile(parent, args, { pubsub }, info) {
+  async deleteFile(parent, args, ctx, info) {
     try {
       // Ensure upload directory exists
       mkdirp.sync(uploadDir)
 
       await deleteSingleFile(args.file);
-      return prisma.file.delete({ where: { id: args.file.id } })
+      return File.deleteOne({ uid: args.file.uid })
 
     } catch (error) {
       return httpErrors.BadRequest(error)

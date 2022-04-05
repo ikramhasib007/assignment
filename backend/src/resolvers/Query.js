@@ -1,5 +1,6 @@
 import httpErrors from "../utils/httpErrors"
 import { Calculation } from '../server/db/models/Calculation'
+import { File } from '../server/db/models/File'
 
 const Query = {
   async calculation(parent, args, ctx, info) {
@@ -59,7 +60,15 @@ const Query = {
     } catch (error) {
       return httpErrors.BadRequest(error)
     }
-  }
+  },
+
+  files(parent, args, ctx, info) {
+    try {
+      return File.find({});
+    } catch (error) {
+      return httpErrors.BadRequest(error)
+    }
+  },
 }
 
 export default Query

@@ -1,7 +1,32 @@
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { classNames } from 'src/utils'
+import UploadFile from 'components/uploads/UploadFile'
+
+const schema = yup.object().shape({
+  title: yup.string().trim().label('Title').required(),
+  file: yup.object().nullable().optional()
+})
+
 function InputForm() {
+  const { control, register, handleSubmit, formState:{ errors }, setValue, reset } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      title: '',
+      file: null
+    }
+  })
+  
+  function onSubmit(formData) {
+    console.log('formData: ', formData);
+    
+  }
+  
+  console.log('errors: ', errors);
 
   return (
-    <form className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
       <div>
         <h3 className="text-2xl leading-6 tracking-tight font-extrabold text-gray-900 sm:text-3xl">Input</h3>
 
@@ -12,47 +37,21 @@ function InputForm() {
             </label>
             <input
               type="text"
-              name="title"
+              {...register("title")}
               id="title"
               placeholder="Title"
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+              className={classNames(
+                errors.title ? "border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500" : "border-gray-300",
+                "focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
+              )}
             />
           </div>
           <p className="text-gray-500 text-base pl-3">Required</p>
 
           <div className="col-span-4">
-            <label htmlFor="calculation-file" className="sr-only">
-              Drag your calculation file
-            </label>
-            <div className="flex justify-center p-4 border-2 border-gray-300 border-dashed rounded-md">
-              <div className="space-y-1 text-center">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-400"
-                  stroke="currentColor"
-                  fill="none"
-                  viewBox="0 0 48 48"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <div className="flex text-sm text-gray-600">
-                  <label
-                    htmlFor="file-upload"
-                    className="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                  >
-                    <span>Upload a file</span>
-                    <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                  </label>
-                  <p className="pl-1">or drag and drop</p>
-                </div>
-                <p className="text-xs text-gray-500">TXT file only; up to 1MB</p>
-              </div>
-            </div>
+            <UploadFile
+              setData={(file) => setValue('file', file)}
+            />
           </div>
           <p className="text-gray-500 text-base pl-3">Optional</p>
         </div>

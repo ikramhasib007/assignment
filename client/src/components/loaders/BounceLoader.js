@@ -1,5 +1,5 @@
 function BounceLoader() {
-  let circleCommonClasses = 'h-3 w-3 bg-neutral-400 rounded-full';
+  let circleCommonClasses = 'h-3 w-3 bg-indigo-500 rounded-full';
     
   return (
     <div className='flex'>
