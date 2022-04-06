@@ -1,8 +1,8 @@
 import httpErrors from '../utils/httpErrors'
-import { createWriteStream, unlink, readFile } from 'fs'
+import { createWriteStream, unlink, readFileSync } from 'fs'
 import * as mkdirp from 'mkdirp'
 import { nanoid } from 'nanoid'
-import { uploadDir } from "../utils"
+import { calc, uploadDir } from "../utils"
 import { Calculation } from '../server/db/models/Calculation'
 import { File } from '../server/db/models/File'
 
@@ -36,11 +36,8 @@ const Mutation = {
       if(fileId) {
         payload.file = fileId
         const file = await File.findById(fileId)
-        readFile(file.path, 'utf8', (err, data) => {
-          if(err) throw new Error('read error')
-          console.log('data: ', data);
-        })
-        payload.result = 10 // dummy result
+        const data = await readFileSync(file.path, 'utf8')
+        if(data) payload.result = calc(data)
         payload.order = 0 // dummy order
       }
       const calculation = new Calculation(payload)
