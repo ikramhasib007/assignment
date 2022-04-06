@@ -26,7 +26,7 @@ export const GET_CALCULATION_LIST = gql`
     $take: Int,
     $cursor: String
   ) {
-    calculationList(query: $query, skip: $skip, take: $take, cursor: $cursor) {
+    calculationList(query: $query, skip: $skip, take: $take, cursor: $cursor) @connection(key: "calculations", filter: ["query"]) {
       calculations(query: $query, skip: $skip, take: $take, cursor: $cursor) {
         ...CalculationFields
       }

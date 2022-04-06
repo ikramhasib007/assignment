@@ -15,10 +15,7 @@ export const cache = new InMemoryCache({
     
     CalculationList: {
       fields: {
-        calculations: {
-          keyArgs: ["query"],
-          merge: false
-        }
+        calculations: cursorTakePaginatedFieldPolicy(),
       }
     },
 
