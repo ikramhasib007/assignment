@@ -27,7 +27,7 @@ const Query = {
 
   async calculations(parent, args, ctx, info) {
     try {
-      return Calculation.find({ isDeleted: false }).skip(args.skip || 0).limit(args.take || 5)
+      return Calculation.find({ isDeleted: false }).skip(args.skip || 0).limit(args.take || 5).sort('-createdAt')
     } catch (error) {
       return httpErrors.BadRequest(error)
     }
@@ -36,7 +36,7 @@ const Query = {
   async calculationList(parent, args, ctx, info) {
     try {
       const count = await Calculation.count({ isDeleted: false })
-      const calculations = await Calculation.find({ isDeleted: false }).skip(args.skip || 0).limit(args.take || 5)
+      const calculations = await Calculation.find({ isDeleted: false }).skip(args.skip || 0).limit(args.take || 5).sort('-createdAt')
       return { calculations, count }
     } catch (error) {
       return httpErrors.BadRequest(error)
