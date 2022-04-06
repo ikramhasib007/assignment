@@ -14,7 +14,7 @@ const schema = yup.object().shape({
 })
 
 function InputForm() {
-  const { register, handleSubmit, formState:{ errors }, setValue, reset } = useForm({
+  const { register, handleSubmit, formState:{ errors }, setValue, reset, setError, clearErrors } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       title: '',
@@ -57,6 +57,7 @@ function InputForm() {
     }).then(() => {
       reset()
     }).catch(e => {
+      setError('file', { message: 'Unexpected number or identifier' })
       console.log('e: ', e);
     })
   }
@@ -84,10 +85,12 @@ function InputForm() {
           </div>
           <p className="text-gray-500 text-base pl-3">Required</p>
 
-          <div className="col-span-4">
+          <div className="relative col-span-4">
             <UploadFile
-              setData={(file) => setValue('file', file)}
+              setData={(file) => { setValue('file', file); clearErrors(['file']); }}
+              error={errors.file}
             />
+
           </div>
           <p className="text-gray-500 text-base pl-3">Optional</p>
         </div>

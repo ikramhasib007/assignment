@@ -6,10 +6,8 @@ import { allowedFileType, classNames } from 'src/utils'
 import BounceLoader from 'components/loaders/BounceLoader'
 
 
-function UploadFile({
-  setData, data = {}
-}) {
-  const [file, setFile] = useState(data)
+function UploadFile(props) {
+  const [file, setFile] = useState(props.data)
   const [mutate, { called, loading }] = useMutation(UPLOAD_FILE)
   const [error, setError] = useState()
 
@@ -22,7 +20,7 @@ function UploadFile({
       if(error) setError();
       mutate({ variables: { file } }).then(({data}) => {
         setFile(data.uploadFile);
-        if(setData) setData(data.uploadFile)
+        if(props.setData) props.setData(data.uploadFile)
       }).catch(e => {
         console.log('File upload fail: ', e);
         setError('Max file size exceeded')
@@ -33,7 +31,7 @@ function UploadFile({
   return (
     <Fragment>
       <div className={classNames(
-        !!error ? "border-red-300" : "border-gray-300",
+        !!error || props.error ? "border-red-300" : "border-gray-300",
         "flex justify-center px-4 py-6 border-2 border-dashed rounded-md"
       )}>
         <label className="relative block">
@@ -53,7 +51,7 @@ function UploadFile({
               loading ? "opacity-30" : ""
             )}
           />
-          {!!error && <p className="absolute -bottom-5 right-0 text-xs text-red-500">{error.toString()}</p>}
+          {(!!error || props.error) && <p className="absolute -bottom-5 right-0 text-xs text-red-500">{error?.toString() ?? props.error?.message}</p>}
         </label>
       </div> 
     </Fragment>
