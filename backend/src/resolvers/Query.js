@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs'
 import httpErrors from "../utils/httpErrors"
 import { Calculation } from '../server/db/models/Calculation'
 import { File } from '../server/db/models/File'
@@ -8,6 +9,17 @@ const Query = {
       const calculation = await Calculation.findOne({ _id: args.id, isDeleted: false }).populate('file');
       if(!calculation) return httpErrors.NotFound()
       return calculation
+    } catch (error) {
+      return httpErrors.BadRequest(error)
+    }
+  },
+
+  async calculationInput(parent, args, ctx, info) {
+    try {
+      const calculation = await Calculation.findOne({ _id: args.id, isDeleted: false }).populate('file');
+      if(!calculation) return httpErrors.NotFound()
+      const input = await readFileSync(calculation.file.path, 'utf8')
+      return { input, calculation }
     } catch (error) {
       return httpErrors.BadRequest(error)
     }

@@ -3,6 +3,7 @@ scalar Upload
 
 type Query {
   calculation(id: ID!): Calculation!
+  calculationInput(id: ID!): CalculationInput!
   calculations(query: String, skip: Int, take: Int, cursor: String): [Calculation!]!
   calculationList(query: String, skip: Int, take: Int, cursor: String): CalculationList
 
@@ -16,6 +17,11 @@ type Mutation {
 
   uploadFile (file: Upload!): File!
   deleteFile (file: DeleteFileInput!): File!
+}
+
+type CalculationInput {
+  input: String!
+  calculation(id: ID!): Calculation!
 }
 
 type CalculationList {

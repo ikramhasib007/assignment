@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { CALCULATION_FIELDS } from './fragments'
+import { CALCULATION_FIELDS, FILE_FIELDS } from './fragments'
 
 
 export const GET_CALCULATIONS = gql`
@@ -37,12 +37,35 @@ export const GET_CALCULATION_LIST = gql`
 
 export const GET_CALCULATION = gql`
   ${CALCULATION_FIELDS}
+  ${FILE_FIELDS}
 
   query GetCalculation(
     $id: ID!
   ) {
     calculation(id: $id) {
       ...CalculationFields
+      file {
+        ...FileFields
+      }
+    }
+  }
+`
+
+export const GET_CALCULATION_INPUT = gql`
+  ${CALCULATION_FIELDS}
+  ${FILE_FIELDS}
+
+  query GetCalculationInput(
+    $id: ID!
+  ) {
+    calculationInput(id: $id) {
+      calculation(id: $id) {
+        ...CalculationFields
+        file {
+          ...FileFields
+        }
+      }
+      input
     }
   }
 `
