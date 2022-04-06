@@ -29,3 +29,5 @@ Then
 ```
 yarn && yarn run dev
 ```
+
+Note: infinite scroll implemented by using `react-waypoint`
