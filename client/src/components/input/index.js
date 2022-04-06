@@ -4,8 +4,9 @@ import * as yup from 'yup'
 import { classNames } from 'src/utils'
 import UploadFile from 'components/uploads/UploadFile'
 import { useMutation } from '@apollo/client'
-import { CREATE_CALCULATION } from 'src/operations/calculation'
+import { CREATE_CALCULATION, GET_CALCULATION_LIST } from 'src/operations/calculation'
 import SubmitButton from 'components/loaders/SubmitButton'
+import { CALCULATION_SKIP, CALCULATION_TAKE } from 'components/results'
 
 const schema = yup.object().shape({
   title: yup.string().trim().label('Title').required(),
@@ -21,7 +22,30 @@ function InputForm() {
     }
   })
 
-  const [mutate, { loading }] = useMutation(CREATE_CALCULATION)
+  const [mutate, { loading }] = useMutation(CREATE_CALCULATION, {
+    update(cache, { data: { createCalculation } }) {
+      const cacheData = cache.readQuery({
+        query: GET_CALCULATION_LIST,
+        variables: { skip: CALCULATION_SKIP, take: CALCULATION_TAKE }
+      })
+
+      const itemExistsOnCache = cacheData.calculationList.calculations.some(item => item.id === createCalculation.id)
+
+      cache.writeQuery({
+        query: GET_CALCULATION_LIST,
+        variables: { skip: CALCULATION_SKIP, take: CALCULATION_TAKE },
+        data: {
+          calculationList: {
+            ...cacheData.calculationList,
+            calculations: [createCalculation, ...cacheData.calculationList.calculations],
+            count: cacheData.calculationList.count > 0 ?
+                itemExistsOnCache ? cacheData.calculationList.count : cacheData.calculationList.count + 1
+                : 1
+          }
+        }
+      })
+    }
+  })
   
   function onSubmit(formData) {
     const data = {

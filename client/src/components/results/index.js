@@ -25,12 +25,16 @@ function Results() {
             if(!subscriptionData.data) return prev;
             
             let newCalculation = subscriptionData.data.calculation.data;
+            const itemExistsOnCache = prev.calculationList.calculations.some(item => item.id === newCalculation.id)
+            
             if(subscriptionData.data.calculation.mutation === 'CREATED') {
               return Object.assign({}, prev, {
                 calculationList: {
                   ...prev.calculationList,
                   calculations: [newCalculation, ...prev.calculationList.calculations],
-                  count: prev.calculationList.count > 0 ? prev.calculationList.count + 1 : 1
+                  count: prev.calculationList.count > 0 ?
+                    itemExistsOnCache ? prev.calculationList.count : prev.calculationList.count + 1
+                    : 1
                 }
               })
             } else {
